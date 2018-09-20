@@ -80,8 +80,9 @@ dispatch_semaphore_t  semap_;
     dispatch_semaphore_wait(semap_, DISPATCH_TIME_FOREVER);
     dispatch_source_t timer = diction_[identifier];
     dispatch_semaphore_signal(semap_);
-    
-    dispatch_resume(timer);
+    if (timer) {
+        dispatch_resume(timer);
+    }
     
 }
 
@@ -94,8 +95,9 @@ dispatch_semaphore_t  semap_;
     dispatch_source_t timer = diction_[identifier];
     [diction_ removeObjectForKey:identifier];
     dispatch_semaphore_signal(semap_);
-    
-    dispatch_source_cancel(timer);
+    if (timer) {
+        dispatch_source_cancel(timer);
+    }
     
 }
 
@@ -106,8 +108,9 @@ dispatch_semaphore_t  semap_;
     dispatch_semaphore_wait(semap_, DISPATCH_TIME_FOREVER);
     dispatch_source_t timer = diction_[identifier];
     dispatch_semaphore_signal(semap_);
-    
-    dispatch_suspend(timer);
+    if (timer) {
+        dispatch_suspend(timer);
+    }
     
 }
 
