@@ -25,12 +25,12 @@ dispatch_semaphore_t  semap_;
     
 }
 
-
 +(NSString *)RWNTimeDoTask:(void(^)(void))task
            startTime:(NSTimeInterval)start
             interval:(NSTimeInterval)interval
                async:(BOOL)async
-              repate:(BOOL)repate{
+              repate:(BOOL)repate
+             rightNowStart:(BOOL)rightNowStart{
     
     if (!task || ((interval<=0) & repate)) return nil;
     
@@ -50,8 +50,9 @@ dispatch_semaphore_t  semap_;
         if (!repate) {
         }
     });
-    dispatch_resume(timer);
-    
+    if (rightNowStart) {
+        dispatch_resume(timer);
+    }
     return identifer;
     
 }
@@ -59,10 +60,30 @@ dispatch_semaphore_t  semap_;
 +(NSString *)RWNTimeDoTask:(void(^)(void))task
                   interval:(NSTimeInterval)interval{
     
-   return [RWNGCDTime RWNTimeDoTask:task startTime:0 interval:interval async:YES repate:YES];
+   return [RWNGCDTime RWNTimeDoTask:task startTime:0 interval:interval async:YES repate:YES rightNowStart:YES];
     
 }
 
+
++(NSString *)RWNTimeNWaitDoTask:(void(^)(void))task
+                       interval:(NSTimeInterval)interval{
+    
+    return [RWNGCDTime RWNTimeDoTask:task startTime:0 interval:interval async:YES repate:YES rightNowStart:NO];
+    
+}
+
+
++(void)startTaskWithIdentifier:(NSString *)identifier{
+    
+    if (identifier.length==0)  return;
+    ///加锁
+    dispatch_semaphore_wait(semap_, DISPATCH_TIME_FOREVER);
+    dispatch_source_t timer = diction_[identifier];
+    dispatch_semaphore_signal(semap_);
+    
+    dispatch_resume(timer);
+    
+}
 
 +(void)cancaleTaskWithIdentifier:(NSString *)identifier{
     
@@ -76,9 +97,19 @@ dispatch_semaphore_t  semap_;
     
     dispatch_source_cancel(timer);
     
-
 }
 
++(void)suspendTaskWithIdentifier:(NSString *)identifier{
+    
+    if (identifier.length==0)  return;
+    ///加锁
+    dispatch_semaphore_wait(semap_, DISPATCH_TIME_FOREVER);
+    dispatch_source_t timer = diction_[identifier];
+    dispatch_semaphore_signal(semap_);
+    
+    dispatch_suspend(timer);
+    
+}
 
 
 

@@ -25,7 +25,8 @@
            startTime:(NSTimeInterval)start
            interval:(NSTimeInterval)interval
            async:(BOOL)async
-           repate:(BOOL)repate;
+           repate:(BOOL)repate
+           rightNowStart:(BOOL)rightNowStart;
 
 
 /**
@@ -38,11 +39,37 @@
 +(NSString *)RWNTimeDoTask:(void(^)(void))task
                   interval:(NSTimeInterval)interval;
 
+
+/**
+ 创建一个定时器暂时不启动
+ 
+ @param task 任务
+ @param interval 时间间隔
+ @return 定时器标识
+ */
++(NSString *)RWNTimeNWaitDoTask:(void(^)(void))task
+                       interval:(NSTimeInterval)interval;
+
+/**
+ 打开定时器通过标识
+ 
+ @param identifier 定时器标识
+ */
++(void)startTaskWithIdentifier:(NSString *)identifier;
+
 /**
   取消定时器通过标识
 
  @param identifier 定时器标识
  */
 +(void)cancaleTaskWithIdentifier:(NSString *)identifier;
+
+
+/**
+ 暂停定时器通过标识
+ 
+ @param identifier 定时器标识
+ */
++(void)suspendTaskWithIdentifier:(NSString *)identifier;
 
 @end
