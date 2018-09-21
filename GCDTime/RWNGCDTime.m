@@ -25,12 +25,12 @@ dispatch_semaphore_t  semap_;
     
 }
 
-+(NSString *)RWNTimeDoTask:(void(^)(void))task
-           startTime:(NSTimeInterval)start
-            interval:(NSTimeInterval)interval
-               async:(BOOL)async
-              repate:(BOOL)repate
-             rightNowStart:(BOOL)rightNowStart{
++(NSString *)RWNTimeDoTask:(taskBlock)task
+                 startTime:(NSTimeInterval)start
+                  interval:(NSTimeInterval)interval
+                     async:(BOOL)async
+                    repate:(BOOL)repate
+             rightNowStart:(BOOL)rightNowStart;{
     
     if (!task || ((interval<=0) & repate)) return nil;
     
@@ -46,7 +46,7 @@ dispatch_semaphore_t  semap_;
     dispatch_semaphore_signal(semap_);
     
     dispatch_source_set_event_handler(timer, ^{
-        task();
+        task(timer);
         if (!repate) {
         }
     });
@@ -57,7 +57,7 @@ dispatch_semaphore_t  semap_;
     
 }
 
-+(NSString *)RWNTimeDoTask:(void(^)(void))task
++(NSString *)RWNTimeDoTask:(taskBlock)task
                   interval:(NSTimeInterval)interval{
     
    return [RWNGCDTime RWNTimeDoTask:task startTime:0 interval:interval async:YES repate:YES rightNowStart:YES];
@@ -65,7 +65,7 @@ dispatch_semaphore_t  semap_;
 }
 
 
-+(NSString *)RWNTimeNWaitDoTask:(void(^)(void))task
++(NSString *)RWNTimeNWaitDoTask:(taskBlock)task
                        interval:(NSTimeInterval)interval{
     
     return [RWNGCDTime RWNTimeDoTask:task startTime:0 interval:interval async:YES repate:YES rightNowStart:NO];

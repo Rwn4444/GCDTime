@@ -22,12 +22,12 @@
     [super viewDidLoad];
     
     NSLog(@"begin");
-//    self.identifire =  [RWNGCDTime RWNTimeDoTask:^{
+//    self.identifire =  [RWNGCDTime RWNTimeDoTask:^(dispatch_source_t timer) {
 //        NSLog(@"RWNTimeDoTask--%@",[NSThread currentThread]);
 //    } interval:1];
     
-    self.identifire =  [RWNGCDTime RWNTimeNWaitDoTask:^{
-      NSLog(@"RWNTimeDoTask--%@",[NSThread currentThread]);
+    self.identifire =  [RWNGCDTime RWNTimeNWaitDoTask:^(dispatch_source_t timer) {
+        NSLog(@"RWNTimeDoTask--%@",[NSThread currentThread]);
     } interval:1];
     
    [RWNGCDTime startTaskWithIdentifier:self.identifire];

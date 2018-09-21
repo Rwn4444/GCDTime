@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void(^taskBlock)(dispatch_source_t timer);
+
 @interface RWNGCDTime : NSObject
 
 
@@ -21,7 +23,7 @@
  @param repate 是否重复
  @return 定时器标识
  */
-+(NSString *)RWNTimeDoTask:(void(^)(void))task
++(NSString *)RWNTimeDoTask:(taskBlock)task
            startTime:(NSTimeInterval)start
            interval:(NSTimeInterval)interval
            async:(BOOL)async
@@ -36,7 +38,7 @@
  @param interval 时间间隔
  @return 定时器标识
  */
-+(NSString *)RWNTimeDoTask:(void(^)(void))task
++(NSString *)RWNTimeDoTask:(taskBlock)task
                   interval:(NSTimeInterval)interval;
 
 
@@ -47,7 +49,7 @@
  @param interval 时间间隔
  @return 定时器标识
  */
-+(NSString *)RWNTimeNWaitDoTask:(void(^)(void))task
++(NSString *)RWNTimeNWaitDoTask:(taskBlock)task
                        interval:(NSTimeInterval)interval;
 
 /**
